@@ -73,7 +73,7 @@ after_initialize do
       end
     end
 
-    anon_user = shadow || AnonymousShadowCreator.create_shadow(user)
+    anon_user = shadow || AnonymousShadowCreator.get(user)
 
     # The client-side UI seems to get upset if the returned post was made by
     # "another" user, and will refuse to clear the field.  Instead, we act as
@@ -87,7 +87,7 @@ after_initialize do
     result.check_errors_from(creator)
 
     if result.success?
-      result.queued_post = post
+      result.post = post
       result.pending_count = 0
       result.reason = :force_anonymous_post
     else
